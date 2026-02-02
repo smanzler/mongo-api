@@ -1,5 +1,4 @@
 import { Response } from "express";
-import { prisma } from "../db/prisma";
 import type { LoginBody, SignupBody } from "../validations/auth.schemas";
 import { AuthService } from "../services/auth.services";
 import { clearRefreshTokenCookie, setRefreshTokenCookie } from "../lib/cookies";
@@ -31,19 +30,6 @@ export async function logout(req: Request, res: Response) {
 }
 
 export async function me(req: Request, res: Response) {
-  const user = await prisma.user.findUnique({
-    where: { id: req.userId! },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
-  if (!user) {
-    res.status(401).json({ error: "User not found" });
-    return;
-  }
+  const user = await AuthService.me(req.userId!);
   res.json(user);
 }

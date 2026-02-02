@@ -1,19 +1,17 @@
 services:
   db:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+    image: mongo:7
+    command: ["mongod", "--quiet"]
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - mongo_data:/data/db
     ports:
-      - "5432:5432"
+      - "27017:27017"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 5s
-      timeout: 2s
-      retries: 20
+      timeout: 5s
+      retries: 10
+      start_period: 5s
 
   api:
     build:
@@ -28,4 +26,4 @@ services:
         condition: service_healthy
 
 volumes:
-  pgdata:
+  mongo_data:

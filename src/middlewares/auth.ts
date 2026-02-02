@@ -1,9 +1,9 @@
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import { InternalServerError, UnauthorizedError } from "../lib/errors";
 import { AUTH_REFRESH_TOKEN_COOKIE_NAME } from "../lib/cookies";
-import { prisma } from "../db/prisma";
-import crypto from "crypto";
+import { db } from "../db/mongo";
 import type { Request } from "../lib/types";
 
 export function requireAuth(
@@ -69,12 +69,11 @@ export async function issueTokens(userId: string) {
     .update(refreshToken)
     .digest("hex");
 
-  await prisma.refreshToken.create({
-    data: {
-      userId,
-      tokenHash: refreshTokenHash,
-      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-    },
+  await db.collection("refreshTokens").insertOne({
+    userId,
+    tokenHash: refreshTokenHash,
+    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+    createdAt: new Date(),
   });
 
   return { accessToken, refreshToken };

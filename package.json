@@ -1,30 +1,26 @@
 {
-  "name": "express-crud",
+  "name": "job-tracker-api",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --outDir dist",
     "start": "node dist/index.js",
     "dev": "docker compose -f docker-compose.dev.yml up",
     "dev:api": "tsx watch src/index.ts",
-    "lint": "eslint 'src/**/*.ts'",
-    "gen": "prisma generate",
-    "migrate": "prisma migrate dev"
+    "lint": "eslint 'src/**/*.ts'"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@prisma/adapter-pg": "^7.3.0",
-    "@prisma/client": "^7.3.0",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.3",
-    "pg": "^8.17.2",
+    "mongodb": "^6.12.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -32,9 +28,7 @@
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.5.2",
-    "@types/pg": "^8.16.0",
     "eslint": "^9.36.0",
-    "prisma": "^7.3.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.2"
   }
